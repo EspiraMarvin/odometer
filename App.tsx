@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -27,7 +28,6 @@ export default function App() {
   }, [speed, maxSpeed]);
 
   useEffect(() => {
-    // let watchId: any
     let watchId: number | null = null;
 
     const requestPermissions = async () => {
@@ -103,54 +103,59 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topSection}>
-        <Text style={styles.title}>Odometer</Text>
-        <Text style={styles.subTitle}>Real-Time Speed Monitor</Text>
-        <Text
-          style={[
-            styles.speedTracked,
-            { color: tracking ? "blue" : maxSpeedReached ? "red" : "green" },
-          ]}
-        >
-          {speed} kph
-        </Text>
+    <>
+      <StatusBar style="light" backgroundColor="#070406" />
 
-        <Button
-          title={tracking ? "Stop Tracking" : "Start Tracking"}
-          onPress={() => setTracking(!tracking)}
-          color={tracking ? "red" : "blue"}
-        />
-        <Text style={styles.maxSpeedWarntitle}>Max Speed Reached!!</Text>
-      </View>
+      <View style={styles.container}>
+        <View style={styles.topSection}>
+          <Text style={styles.title}>Odometer</Text>
+          <Text style={styles.subTitle}>Real-Time Speed Monitor</Text>
+          <Text
+            style={[
+              styles.speedTracked,
+              { color: tracking ? "blue" : maxSpeedReached ? "red" : "green" },
+            ]}
+          >
+            {speed} kph
+          </Text>
 
-      <View style={styles.bottomSection}>
-        <Text style={styles.subTitle}>Set maximum speed</Text>
-        <Text style={styles.speed}>Max Speed: {maxSpeed} kph</Text>
-        <TextInput
-          style={styles.input}
-          value={inputSpeed}
-          onChangeText={setInputSpeed}
-          keyboardType="numeric"
-          placeholder="Enter speed"
-          maxLength={3}
-        />
-        <View style={styles.saveMaxSpeedTextBtn}>
           <Button
-            disabled={inputSpeed.length === 0}
-            title="Set Speed"
-            onPress={handleSetSpeed}
-            color="blue"
+            title={tracking ? "Stop Tracking" : "Start Tracking"}
+            onPress={() => setTracking(!tracking)}
+            color={tracking ? "red" : "blue"}
           />
+          <Text style={styles.maxSpeedWarntitle}>Max Speed Reached!!</Text>
+        </View>
+
+        <View style={styles.bottomSection}>
+          <Text style={styles.subTitle}>Set maximum speed</Text>
+          <Text style={styles.speed}>Max Speed: {maxSpeed} kph</Text>
+          <TextInput
+            style={styles.input}
+            value={inputSpeed}
+            onChangeText={setInputSpeed}
+            keyboardType="numeric"
+            placeholder="Enter speed"
+            maxLength={3}
+          />
+          <View style={styles.saveMaxSpeedTextBtn}>
+            <Button
+              disabled={inputSpeed.length === 0}
+              title="Set Speed"
+              onPress={handleSetSpeed}
+              color="blue"
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 35,
     // justifyContent: "center",
     // alignItems: "center",
     backgroundColor: "#fff",
