@@ -9,9 +9,9 @@
 </tr>
 <tr>
 <td>
-<img src="./screenshots/screenshot1.jpeg" alt="" style="width: 100%">
-<img src="./screenshots/screenshot2.jpeg" alt="" style="width: 100%">
-<img src="./screenshots/screenshot3.jpeg" alt="" style="width: 100%">
+<img src="./screenshots/screenshot1.jpeg" alt="" style="width: 33%">
+<img src="./screenshots/screenshot2.jpeg" alt="" style="width: 33%">
+<img src="./screenshots/screenshot3.jpeg" alt="" style="width: 33%">
 </td>
 </tr>
 </table>
