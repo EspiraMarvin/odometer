@@ -23,6 +23,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "The app needs access to the microphone",
+          "speechRecognitionPermission": "Allow the app to securely recognize user speech"
+        }
+      ]
+    ]
   }
 }
