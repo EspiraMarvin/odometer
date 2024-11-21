@@ -1,0 +1,30 @@
+diff --git a/ios/odometer.xcodeproj/project.pbxproj b/ios/odometer.xcodeproj/project.pbxproj
+index 8bdd922..54c0dd9 100644
+--- a/ios/odometer.xcodeproj/project.pbxproj
++++ b/ios/odometer.xcodeproj/project.pbxproj
+@@ -189,7 +189,7 @@
+ 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
+ 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+ 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+-				818BCE7D73D34466B212E0BF /* odometer-Bridging-Header.h in Resources */,
++				1E5C07002B4741979BA93BF8 /* odometer-Bridging-Header.h in Resources */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+diff --git a/ios/odometer/Info.plist b/ios/odometer/Info.plist
+index 349e2aa..0213a62 100644
+--- a/ios/odometer/Info.plist
++++ b/ios/odometer/Info.plist
+@@ -44,6 +44,12 @@
+       <key>NSAllowsLocalNetworking</key>
+       <true/>
+     </dict>
++    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
++    <string>Allow $(PRODUCT_NAME) to access your location</string>
++    <key>NSLocationAlwaysUsageDescription</key>
++    <string>Allow $(PRODUCT_NAME) to access your location</string>
++    <key>NSLocationWhenInUseUsageDescription</key>
++    <string>Allow $(PRODUCT_NAME) to access your location</string>
+     <key>NSMicrophoneUsageDescription</key>
+     <string>The app needs access to the microphone</string>
+     <key>NSSpeechRecognitionUsageDescription</key>
