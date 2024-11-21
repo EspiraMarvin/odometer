@@ -42,7 +42,8 @@
           "microphonePermission": "The app needs access to the microphone",
           "speechRecognitionPermission": "Allow the app to securely recognize user speech"
         }
-      ]
+      ],
+      "patch-project"
     ],
     "extra": {
       "eas": {
