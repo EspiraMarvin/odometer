@@ -2732,10 +2732,10 @@ expo-modules-autolinking@2.0.2:
     require-from-string "^2.0.2"
     resolve-from "^5.0.0"
 
-expo-modules-core@2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/expo-modules-core/-/expo-modules-core-2.0.4.tgz"
-  integrity sha512-nNS40KYh1d7tWXCcEKBrSigIKCVfJwkPLhR/mniAoPzqevUDLVJNJjIgKfQL6kPlsViC3hwwgrUpKSlmWv2DFg==
+expo-modules-core@2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-2.0.5.tgz#8a15342ba091329f2e247d7b2f1e9cd5a0459017"
+  integrity sha512-FSDsszVyNeyOUuEgfoM0Jcmmdpun+d0P0PvwDKadQ+KZaV5ziePWzMwN5bz3fLJ2i1yMP2hApQ5OkksblNDGGA==
   dependencies:
     invariant "^2.2.4"
 
@@ -2749,10 +2749,10 @@ expo-status-bar@~2.0.0:
   resolved "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-2.0.0.tgz"
   integrity sha512-vxxdpvpNDMTEc5uTiIrbTvySKKUsOACmfl8OZuUdjNle05oGqwtq3v5YObwym/njSByjoyuZX8UpXBZnxvarwQ==
 
-expo@~52.0.7:
-  version "52.0.9"
-  resolved "https://registry.npmjs.org/expo/-/expo-52.0.9.tgz"
-  integrity sha512-xbgsvshsJ99wEHp8IZLp4C4SIYVnafrlmQjTwyGjHKvZhBXLHRp7+fwx+Fa26iqQEbaPZ3XkSGxKR73cttR4ug==
+expo@~52.0.10:
+  version "52.0.10"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-52.0.10.tgz#bf73368e8b1277cf589ae9bbaf8939785d98311d"
+  integrity sha512-u5uN1RCqLu5sGw3uyzpO8ajifkaU73ZgEctnWE4E2AHRi36pt3pJxZheuG7ZNQB6JI6StukUqBXSFmm6F7ixBQ==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/cli" "0.21.7"
@@ -2768,7 +2768,7 @@ expo@~52.0.7:
     expo-font "~13.0.1"
     expo-keep-awake "~14.0.1"
     expo-modules-autolinking "2.0.2"
-    expo-modules-core "2.0.4"
+    expo-modules-core "2.0.5"
     fbemitter "^3.0.0"
     web-streams-polyfill "^3.3.2"
     whatwg-url-without-unicode "8.0.0-3"
