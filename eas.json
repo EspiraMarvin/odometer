@@ -5,13 +5,14 @@
   },
   "build": {
     "development": {
+      "env": { "NODE_ENV": "production" },
       "developmentClient": true,
       "distribution": "internal"
     },
 
     "preview": {
       "distribution": "internal",
-      "env": { "NODE_ENV": "development" },
+      "env": { "NODE_ENV": "production" },
       "android": {
         "buildType": "apk"
       },
