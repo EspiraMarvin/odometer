@@ -11,17 +11,16 @@
     },
 
     "preview": {
-      "distribution": "internal",
-      "env": { "NODE_ENV": "production" },
       "android": {
         "buildType": "apk"
       },
       "ios": {
         "simulator": true
-      }
+      },
+      "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      // "autoIncrement": true
     }
   },
   "submit": {
