@@ -10,8 +10,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-native-voice/voice": "^3.2.4",
     "expo": "~52.0.11",
+    "expo-dev-client": "~5.0.4",
     "expo-linear-gradient": "~14.0.1",
     "expo-location": "~18.0.2",
     "expo-speech": "~13.0.0",
@@ -26,6 +26,15 @@
     "@types/react-native-vector-icons": "^6.4.18",
     "react-native-vector-icons": "^10.2.0",
     "typescript": "^5.3.3"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "patch-project"
+        ]
+      }
+    }
   },
   "private": true
 }
