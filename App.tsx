@@ -130,7 +130,7 @@ export default function App() {
               { color: tracking ? "blue" : maxSpeedReached ? "red" : "green" },
             ]}
           >
-            {speed} km/h
+            {speed} kph
           </Text>
 
           <View style={styles.btnContainer}>
@@ -166,7 +166,7 @@ export default function App() {
 
         <View style={styles.bottomSection}>
           <Text style={styles.subTitle}>Set maximum speed</Text>
-          <Text style={styles.speed}>Max Speed: {maxSpeed} km/h</Text>
+          <Text style={styles.speed}>Max Speed: {maxSpeed} kph</Text>
           <View style={styles.maxSpeedActionContainer}>
             {/* Input with Save Button */}
             <View style={styles.inputWrapper}>
