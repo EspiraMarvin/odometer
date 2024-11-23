@@ -21,7 +21,6 @@
     "ios": {
       "buildNumber": "1.0.0",
       "supportsTablet": true,
-      "package": "com.marvinespira.odometer",
       "bundleIdentifier": "com.marvinespira.odometer"
     },
     "android": {
@@ -35,16 +34,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      [
-        "@react-native-voice/voice",
-        {
-          "microphonePermission": "The app needs access to the microphone",
-          "speechRecognitionPermission": "Allow the app to securely recognize user speech"
-        }
-      ],
-      "patch-project"
-    ],
     "extra": {
       "eas": {
         "projectId": "11b216d1-bba0-45a9-898d-8fbb39d182a6"
