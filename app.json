@@ -39,6 +39,14 @@
         "projectId": "11b216d1-bba0-45a9-898d-8fbb39d182a6"
       }
     },
-    "owner": "marvinespira"
+    "owner": "marvinespira",
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ]
+    ]
   }
 }

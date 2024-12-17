@@ -12,7 +12,12 @@ import {
   PermissionsAndroid,
 } from "react-native";
 import * as Location from "expo-location";
+import { Audio } from "expo-av";
+import axios from "axios";
+// import * as FileSystem from "expo-file-system";
+import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { checkNumberIsCorrect } from "./utils/helpers";
 
 export default function App() {
   const [speed, setSpeed] = useState<number>(0); // Speed in kph/km/h
@@ -21,8 +26,46 @@ export default function App() {
   const [maxSpeedReached, setMaxSpeedReached] = useState(false);
 
   const [maxSpeed, setMaxSpeed] = useState(60); // Default max speed
-  const [listening, setListening] = useState(false);
   const [inputSpeed, setInputSpeed] = useState(""); // Input field value for max speed
+  const [selectedSpeed, setSelectedSpeed] = useState(60);
+  const [drpDownSpeed, setDrpDownSpeed] = useState([60, 70, 80, 90, 100]);
+
+  const handleInputChange = (text: string) => {
+    setInputSpeed(text);
+    // If the user manually enters a speed, sync the dropdown to match it
+    if (
+      text &&
+      !drpDownSpeed.includes(Number(text)) &&
+      checkNumberIsCorrect(Number(text))
+    ) {
+      // setSelectedSpeed(Number(text)); // Set the dropdown value to the custom input value
+      setTimeout(() => {
+        const newDrpSped = [...drpDownSpeed, Number(text)];
+        // save sorting nos in asc order
+        setDrpDownSpeed(newDrpSped.sort((a, b) => a - b));
+      }, 2000);
+    }
+  };
+
+  const handleSelectChange = (text: string) => {
+    setInputSpeed(text);
+    setMaxSpeed(Number(text));
+    setInputSpeed("");
+    // If the user manually enters a speed, sync the dropdown to match it
+    if (text && !drpDownSpeed.includes(Number(text))) {
+      setSelectedSpeed(Number(text)); // Set the dropdown value to the custom input value
+      setMaxSpeed(Number(text));
+      setTimeout(() => {
+        const newDrpSped = [...drpDownSpeed, Number(text)];
+        setDrpDownSpeed(newDrpSped.sort());
+      }, 2000);
+    }
+  };
+
+  const [listening, setListening] = useState(false);
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
+  const [recordings, setRecordings] = React.useState<any>({});
+  const [transcription, setTranscription] = useState<string | null>(null); // store the transcribed text
 
   let subscription: { remove: any } | null = null;
 
@@ -61,7 +104,7 @@ export default function App() {
       subscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 1000,
+          timeInterval: 300,
           distanceInterval: 1,
         },
         (position) => {
@@ -116,6 +159,142 @@ export default function App() {
     setInputSpeed("");
   };
 
+  useEffect(() => {
+    async function startRecording() {
+      try {
+        await Audio.requestPermissionsAsync();
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: true,
+          playsInSilentModeIOS: true,
+        });
+        // Starting recording
+        // Create a new recording instance
+        const newRecording = new Audio.Recording();
+        setRecordings([]);
+        await newRecording.prepareToRecordAsync({
+          android: {
+            extension: ".wav",
+            outputFormat: 2, // Default output format
+            audioEncoder: 0, // Default audio encoder
+            sampleRate: 44100,
+            numberOfChannels: 2,
+            bitRate: 128000,
+          },
+          ios: {
+            extension: ".wav",
+            audioQuality: 256, // High audio quality
+            sampleRate: 44100,
+            numberOfChannels: 2,
+            bitRate: 128000,
+            linearPCMBitDepth: 16,
+            linearPCMIsBigEndian: false,
+            linearPCMIsFloat: false,
+          },
+          web: {
+            mimeType: "audio/webm",
+            bitsPerSecond: 128000, // Set bit rate for web recording
+          },
+        });
+
+        await newRecording.startAsync();
+        setRecording(newRecording);
+      } catch (err) {
+        console.error("Failed to start recording", err);
+      }
+    }
+
+    async function stopRecording() {
+      if (!recording) return;
+      // let allRecordings = [...recordings];
+      setRecordings({});
+      await recording.stopAndUnloadAsync();
+      const { sound, status } = await recording.createNewLoadedSoundAsync();
+      const val = {
+        sound: sound,
+        file: recording.getURI(),
+      };
+
+      setRecordings(val);
+      setRecording(null);
+      // start transcription after recording
+      // const uri = val.file;
+      // await transcribeAudio(uri);
+    }
+
+    if (listening) {
+      startRecording();
+    }
+
+    if (!listening) {
+      stopRecording();
+    }
+
+    // Cleanup when component unmounts
+    return () => {
+      if (recording) {
+        recording.stopAndUnloadAsync();
+      }
+    };
+  }, [listening]);
+
+  function getRecordingLines() {
+    return (
+      <View>
+        <View style={styles.btnContainer}>
+          <Text>
+            Recording #{} | {recordings.duration}
+          </Text>
+          <Text onPress={() => recordings.sound.replayAsync()}>
+            <Icon name="play" size={20} color="#888" /> Play
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
+  //  to send the audio file to OpenAI Whisper API
+  async function transcribeAudio(fileUri: string | null) {
+    // No file URI provided for transcription
+    if (!fileUri) {
+      return;
+    }
+
+    try {
+      // Transcribing audio
+
+      // set file with the Blob type of wav for the recorded audio
+      const file = {
+        uri: fileUri,
+        name: "audio.wav",
+        type: "audio/wav", // MIME type
+      };
+
+      const formData = new FormData();
+      // Cast file to any type, as FormData expects a Blob or string
+      formData.append("file", file as any);
+      // OpenAI Whisper API model
+      formData.append("model", "whisper-1");
+
+      const OPENAI_API_KEY = `${process.env.OPENAI_API_KEY}`;
+
+      const response = await axios.post(
+        "https://api.openai.com/v1/audio/transcriptions",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+          },
+        }
+      );
+
+      console.log("Transcription response:", response.data.text);
+      setTranscription(response.data.text); // Update transcription state
+    } catch (error) {
+      console.error("Failed to transcribe audio:", error);
+    }
+  }
+
   return (
     <>
       <StatusBar style="light" backgroundColor="#070406" />
@@ -165,19 +344,39 @@ export default function App() {
         </View>
 
         <View style={styles.bottomSection}>
+          {Object.entries(recordings).length > 0 && getRecordingLines()}
+
           <Text style={styles.subTitle}>Set maximum speed</Text>
           <Text style={styles.speed}>Max Speed: {maxSpeed} kph</Text>
           <View style={styles.maxSpeedActionContainer}>
-            {/* Input with Save Button */}
+            {/* Dropdown (Select Speed) */}
             <View style={styles.inputWrapper}>
+              <View style={styles.dropdownWrapper}>
+                <Picker
+                  style={styles.dropdown}
+                  onValueChange={handleSelectChange}
+                  // setSelectedSpeed(itemValue);
+                  // setInputSpeed(itemValue);
+                >
+                  {drpDownSpeed.map((speed, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={String(speed)}
+                      value={String(speed)}
+                    />
+                  ))}
+                </Picker>
+              </View>
+              {/* Input max speed */}
               <TextInput
                 keyboardType="numeric"
                 value={inputSpeed}
                 style={styles.input}
                 placeholder="Enter speed"
-                onChangeText={setInputSpeed}
+                onChangeText={handleInputChange}
                 maxLength={3}
               />
+              {/* Input with Save Button */}
               <TouchableOpacity
                 disabled={inputSpeed.length === 0}
                 onPress={() => handleSetSpeed()}
@@ -327,5 +526,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 50,
     width: 50,
+  },
+  dropdownWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    height: 50,
+    width: 65, // Adjust the width as needed
+  },
+  dropdown: {
+    flex: 1,
+    height: 50,
+    color: "#000",
   },
 });
