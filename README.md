@@ -15,3 +15,11 @@
 </td>
 </tr>
 </table>
+
+### build commands using eas
+
+#### for android
+###### eas build --profile development --platform android
+
+#### for ios
+###### eas build --profile development --platform ios
