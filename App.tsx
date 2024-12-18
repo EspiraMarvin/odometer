@@ -344,8 +344,8 @@ export default function App() {
         </View>
 
         <View style={styles.bottomSection}>
-          {Object.entries(recordings).length > 0 && getRecordingLines()}
-
+          {/* recordings */}
+          {/* {Object.entries(recordings).length > 0 && getRecordingLines()} */}
           <Text style={styles.subTitle}>Set maximum speed</Text>
           <Text style={styles.speed}>Max Speed: {maxSpeed} kph</Text>
           <View style={styles.maxSpeedActionContainer}>
