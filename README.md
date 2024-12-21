@@ -19,6 +19,10 @@
 ### build commands using eas
 
 #### for android
+##### preview
+###### eas build --profile preview --platform android
+
+##### dev
 ###### eas build --profile development --platform android
 
 #### for ios
