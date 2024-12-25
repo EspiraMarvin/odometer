@@ -18,8 +18,24 @@ import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { checkNumberIsCorrect } from "./utils/helpers";
+import * as SplashScreen from 'expo-splash-screen';
 
 export default function App() {
+  useEffect(() => {
+    // Prevent the splash screen from auto-hiding
+    SplashScreen.preventAutoHideAsync();
+
+    const prepareApp = async () => {
+      // Perform any initial app setup (e.g., loading fonts or assets)
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate a delay
+
+      // Hide the splash screen once the app is ready
+      SplashScreen.hideAsync();
+    };
+
+    prepareApp();
+  }, []);
+
   const [speed, setSpeed] = useState<number>(0); // Speed in kph/km/h
   const [tracking, setTracking] = useState(false);
   const [pause, setPause] = useState(false);
@@ -29,6 +45,7 @@ export default function App() {
   const [inputSpeed, setInputSpeed] = useState(""); // Input field value for max speed
   const [selectedSpeed, setSelectedSpeed] = useState(60);
   const [drpDownSpeed, setDrpDownSpeed] = useState([60, 70, 80, 90, 100]);
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
 
   const handleInputChange = (text: string) => {
     setInputSpeed(text);
@@ -62,6 +79,21 @@ export default function App() {
     }
   };
 
+  // Function to load and play sound
+  const playWarningSound = async () => {
+    if (sound) {
+      await sound.stopAsync();
+      await sound.unloadAsync();
+    }
+
+    const { sound: newSound } = await Audio.Sound.createAsync(
+      require("./assets/warning.mp3")
+    );
+    setSound(newSound);
+
+    await newSound.playAsync();
+  };
+
   const [listening, setListening] = useState(false);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [recordings, setRecordings] = React.useState<any>({});
@@ -71,6 +103,9 @@ export default function App() {
 
   useEffect(() => {
     setMaxSpeedReached(speed > maxSpeed);
+    if (speed > maxSpeed) {
+      playWarningSound();
+    }
   }, [speed, maxSpeed]);
 
   useEffect(() => {
